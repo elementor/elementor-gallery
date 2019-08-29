@@ -1,0 +1,30 @@
+{
+  "name": "elementor-gallery",
+  "slug": "elementor-gallery",
+  "version": "0.0.1",
+  "author": "Elementor Team",
+  "homepage": "https://elementor.com/",
+  "scripts": {
+    "dev": "webpack",
+    "watch": "webpack --watch",
+    "build": "NODE_ENV=production webpack"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.5.5",
+    "@babel/plugin-transform-runtime": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/runtime": "^7.5.5",
+    "babel-eslint": "^10.0.3",
+    "babel-loader": "^8.0.6",
+    "css-loader": "^3.2.0",
+    "eslint": "^6.2.2",
+    "eslint-loader": "^3.0.0",
+    "mini-css-extract-plugin": "^0.8.0",
+    "node-sass": "^4.12.0",
+    "sass-loader": "^7.3.1",
+    "style-loader": "^1.0.0",
+    "webpack": "^4.39.2",
+    "webpack-cli": "^3.3.7",
+    "webpack-merge": "^4.2.2"
+  }
+}
