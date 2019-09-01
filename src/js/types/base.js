@@ -1,8 +1,8 @@
 export default class BaseGalleryType {
 	constructor( settings ) {
-		this.settings = $.extend( true, this.getDefaultSettings(), settings );
+		this.settings = jQuery.extend( true, this.getDefaultSettings(), settings );
 
-		this.$container = $( this.settings.container );
+		this.$container = jQuery( this.settings.container );
 
 		this.runGallery = this.debounce( this.runGallery.bind( this ), 300 );
 
@@ -23,7 +23,7 @@ export default class BaseGalleryType {
 
 	initElements() {
 		this.elements = {
-			$window: $( window ),
+			$window: jQuery( window ),
 		};
 
 		this.$container.addClass( this.getItemClass( this.settings.classes.container ) + ' ' + this.getItemClass( this.settings.type ) );
@@ -35,13 +35,13 @@ export default class BaseGalleryType {
 
 	createItem( itemData ) {
 		const { classes } = this.settings,
-			$item = $( '<div>', { class: this.getItemClass( classes.item ) } ),
-			$image = $( '<div>', { class: this.getItemClass( classes.image ) } ).css( 'background-image', 'url(' + itemData.thumbnail + ')' );
+			$item = jQuery( '<div>', { class: this.getItemClass( classes.item ) } ),
+			$image = jQuery( '<div>', { class: this.getItemClass( classes.image ) } ).css( 'background-image', 'url(' + itemData.thumbnail + ')' );
 
 		$item.append( $image );
 
 		if ( itemData.url ) {
-			const $link = $( '<a>', { class: this.getItemClass( classes.link ), href: itemData.url } );
+			const $link = jQuery( '<a>', { class: this.getItemClass( classes.link ), href: itemData.url } );
 
 			$image.wrap( $link );
 		}
