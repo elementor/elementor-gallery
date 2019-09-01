@@ -160,5 +160,7 @@ export default class BaseGalleryType {
 
 	destroy() {
 		this.unbindEvents();
+
+		this.$container.empty();
 	}
 }
