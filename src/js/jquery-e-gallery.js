@@ -1,4 +1,4 @@
-import EGallery from './eGallery';
+import EGallery from './e-gallery';
 
 const $ = jQuery;
 

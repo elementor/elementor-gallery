@@ -9,7 +9,7 @@ const commonConfig = {
 	devtool: 'source-map',
 	plugins: [
 		new MiniCssExtractPlugin( {
-			filename: '../css/eGallery' + fileSuffix + '.css',
+			filename: '../css/e-gallery' + fileSuffix + '.css',
 		} ),
 	],
 	module: {
@@ -47,20 +47,20 @@ const commonConfig = {
 };
 
 const libraryConfig = {
-	entry: './src/js/eGallery.js',
+	entry: './src/js/e-gallery.js',
 	output: {
 		path: __dirname + '/dist/js',
-		filename: `eGallery${ fileSuffix }.js`,
+		filename: `e-gallery${ fileSuffix }.js`,
 		library: 'EGallery',
 		libraryExport: 'default',
 	},
 };
 
 const jQueryConfig = {
-	entry: './src/js/jquery-eGallery.js',
+	entry: './src/js/jquery-e-gallery.js',
 	output: {
 		path: __dirname + '/dist/js',
-		filename: `jquery-eGallery${ fileSuffix }.js`,
+		filename: `jquery-e-gallery${ fileSuffix }.js`,
 	},
 };
 
