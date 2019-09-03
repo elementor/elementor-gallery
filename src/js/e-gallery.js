@@ -2,7 +2,7 @@ import GridGallery from './types/grid';
 import JustifiedGallery from './types/justified';
 import MasonryGallery from './types/masonry';
 
-import eGalleryScss from '../scss/eGallery.scss';
+import eGalleryScss from '../scss/e-gallery.scss';
 
 export default class EGallery {
 	constructor( userSettings ) {
