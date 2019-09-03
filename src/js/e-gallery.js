@@ -63,5 +63,3 @@ export default class EGallery {
 		this.galleryHandler.destroy();
 	}
 }
-
-window.EGallery = EGallery;
