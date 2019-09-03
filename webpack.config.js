@@ -2,27 +2,14 @@ const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' ),
 	merge = require( 'webpack-merge' ),
 	mode = process.env.NODE_ENV || 'development';
 
-const devConfig = {
-	devtool: 'source-map',
-};
-
-const productionConfig = {};
-
 const fileSuffix = 'development' === mode ? '' : '.min';
 
 const commonConfig = {
 	mode,
-	entry: {
-		eGallery: './src/js/eGallery.js',
-		'jquery-eGallery': './src/js/jquery-eGallery.js',
-	},
-	output: {
-		path: __dirname + '/dist/js',
-		filename: '[name]' + fileSuffix + '.js',
-	},
+	devtool: 'source-map',
 	plugins: [
 		new MiniCssExtractPlugin( {
-			filename: '../css/eGallery' + fileSuffix + '.css',
+			filename: '../css/e-gallery' + fileSuffix + '.css',
 		} ),
 	],
 	module: {
@@ -59,4 +46,22 @@ const commonConfig = {
 	},
 };
 
-module.exports = merge( commonConfig, 'development' === mode ? devConfig : productionConfig );
+const libraryConfig = {
+	entry: './src/js/e-gallery.js',
+	output: {
+		path: __dirname + '/dist/js',
+		filename: `e-gallery${ fileSuffix }.js`,
+		library: 'EGallery',
+		libraryExport: 'default',
+	},
+};
+
+const jQueryConfig = {
+	entry: './src/js/jquery-e-gallery.js',
+	output: {
+		path: __dirname + '/dist/js',
+		filename: `jquery-e-gallery${ fileSuffix }.js`,
+	},
+};
+
+module.exports = [ merge( commonConfig, libraryConfig ), merge( commonConfig, jQueryConfig ) ];

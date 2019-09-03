@@ -6,7 +6,7 @@ import eGalleryScss from '../scss/eGallery.scss';
 
 export default class EGallery {
 	constructor( userSettings ) {
-		this.settings = $.extend( true, this.getDefaultSettings(), userSettings );
+		this.settings = jQuery.extend( true, this.getDefaultSettings(), userSettings );
 
 		this.initGalleriesTypes();
 
