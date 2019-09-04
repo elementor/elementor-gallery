@@ -9,6 +9,7 @@ const commonConfig = {
 	devtool: 'source-map',
 	output: {
 		path: __dirname + '/dist/js',
+		devtoolModuleFilenameTemplate: '../../[resource]',
 	},
 	plugins: [
 		new MiniCssExtractPlugin( {
