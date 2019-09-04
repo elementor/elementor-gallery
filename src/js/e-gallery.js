@@ -17,6 +17,8 @@ export default class EGallery {
 		return {
 			container: null,
 			type: 'grid',
+			overlay: false,
+			overlayTemplate: '<div class="{{ classesPrefix }}{{ classes.overlayTitle }}">{{ title }}</div><div class="{{ classesPrefix }}{{ classes.overlayDescription }}">{{ description }}</div>',
 			columns: 5,
 			horizontalGap: 10,
 			verticalGap: 10,
@@ -26,6 +28,9 @@ export default class EGallery {
 				container: 'container',
 				item: 'item',
 				image: 'image',
+				overlay: 'overlay',
+				overlayTitle: 'overlay__title',
+				overlayDescription: 'overlay__description',
 				link: 'link',
 				firstRowItem: 'first-row-item',
 				animated: '-animated',

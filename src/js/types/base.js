@@ -33,17 +33,62 @@ export default class BaseGalleryType {
 		this.elements.$window.on( 'resize', this.runGallery );
 	}
 
+	getTemplateArgs( args, key ) {
+		if ( key ) {
+			const keyStack = key.split( '.' ),
+				currentKey = keyStack.splice( 0, 1 );
+
+			if ( ! keyStack.length ) {
+				return args[ currentKey ] || '';
+			}
+
+			if ( ! args[ currentKey ] ) {
+				return null;
+			}
+
+			return this.getTemplateArgs( args[ currentKey ], keyStack.join( '.' ) );
+		}
+
+		return args;
+	}
+
+	compileTemplate( template, args ) {
+		return template.replace( /{{([^}]+)}}/g, ( match, placeholder ) => this.getTemplateArgs( args, placeholder.trim() ) );
+	}
+
+	createOverlay( overlayData ) {
+		const { classes, overlayTemplate } = this.settings,
+			$overlay = jQuery( '<div>', { class: this.getItemClass( classes.overlay ) } ),
+			overlayContent = this.compileTemplate( overlayTemplate, jQuery.extend( true, this.settings, overlayData ) );
+
+		$overlay.html( overlayContent );
+
+		return $overlay;
+	}
+
 	createItem( itemData ) {
 		const { classes } = this.settings,
 			$item = jQuery( '<div>', { class: this.getItemClass( classes.item ) } ),
 			$image = jQuery( '<div>', { class: this.getItemClass( classes.image ) } ).css( 'background-image', 'url(' + itemData.thumbnail + ')' );
 
-		$item.append( $image );
+		let $overlay;
+
+		if ( this.settings.overlay ) {
+			$overlay = this.createOverlay( itemData );
+		}
+
+		let $contentWrapper = $item;
 
 		if ( itemData.url ) {
-			const $link = jQuery( '<a>', { class: this.getItemClass( classes.link ), href: itemData.url } );
+			$contentWrapper = jQuery( '<a>', { class: this.getItemClass( classes.link ), href: itemData.url } );
 
-			$image.wrap( $link );
+			$item.html( $contentWrapper );
+		}
+
+		$contentWrapper.html( $image );
+
+		if ( $overlay ) {
+			$contentWrapper.append( $overlay );
 		}
 
 		return $item;
