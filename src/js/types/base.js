@@ -33,23 +33,21 @@ export default class BaseGalleryType {
 		this.elements.$window.on( 'resize', this.runGallery );
 	}
 
-	getTemplateArgs( args, key ) {
-		if ( key ) {
-			const keyStack = key.split( '.' ),
-				currentKey = keyStack.splice( 0, 1 );
+	getNestedObjectData( object, key ) {
+		const keyStack = key.split( '.' ),
+			currentKey = keyStack.splice( 0, 1 );
 
-			if ( ! keyStack.length ) {
-				return args[ currentKey ] || '';
-			}
-
-			if ( ! args[ currentKey ] ) {
-				return null;
-			}
-
-			return this.getTemplateArgs( args[ currentKey ], keyStack.join( '.' ) );
+		if ( ! keyStack.length ) {
+			return { object, key };
 		}
 
-		return args;
+		return this.getNestedObjectData( object[ currentKey ], keyStack.join( '.' ) );
+	}
+
+	getTemplateArgs( args, key ) {
+		const nestedObjectData = this.getNestedObjectData( args, key );
+
+		return nestedObjectData.object[ nestedObjectData.key ] || '';
 	}
 
 	compileTemplate( template, args ) {
@@ -189,14 +187,24 @@ export default class BaseGalleryType {
 		this.loadImages();
 	}
 
-	runGallery() {
+	runGallery( refresh ) {
 		const containerStyle = this.$container[ 0 ].style;
 
 		containerStyle.setProperty( '--hgap', this.getCurrentDeviceSetting( 'horizontalGap' ) + 'px' );
 		containerStyle.setProperty( '--vgap', this.getCurrentDeviceSetting( 'verticalGap' ) + 'px' );
 		containerStyle.setProperty( '--animation-duration', this.settings.animationDuration + 'ms' );
 
-		this.run();
+		this.run( refresh );
+	}
+
+	setSettings( key, value ) {
+		const nestedObjectData = this.getNestedObjectData( this.settings, key );
+
+		if ( nestedObjectData.object ) {
+			nestedObjectData.object[ nestedObjectData.key ] = value;
+
+			this.runGallery( true );
+		}
 	}
 
 	unbindEvents() {

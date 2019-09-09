@@ -6,7 +6,7 @@ import eGalleryScss from '../scss/e-gallery.scss';
 
 export default class EGallery {
 	constructor( userSettings ) {
-		this.settings = jQuery.extend( true, this.getDefaultSettings(), userSettings );
+		this.userSettings = userSettings;
 
 		this.initGalleriesTypes();
 
@@ -59,9 +59,15 @@ export default class EGallery {
 	}
 
 	createGallery() {
-		const GalleryHandlerType = this.galleriesTypes[ this.settings.type ];
+		const settings = jQuery.extend( true, this.getDefaultSettings(), this.userSettings );
 
-		this.galleryHandler = new GalleryHandlerType( this.settings );
+		const GalleryHandlerType = this.galleriesTypes[ settings.type ];
+
+		this.galleryHandler = new GalleryHandlerType( settings );
+	}
+
+	setSettings( key, value ) {
+		this.galleryHandler.setSettings( key, value );
 	}
 
 	destroy() {
