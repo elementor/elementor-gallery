@@ -16,6 +16,7 @@ export default class EGallery {
 	getDefaultSettings() {
 		return {
 			container: null,
+			items: null,
 			type: 'grid',
 			overlay: false,
 			overlayTemplate: '<div class="{{ classesPrefix }}{{ classes.overlayTitle }}">{{ title }}</div><div class="{{ classesPrefix }}{{ classes.overlayDescription }}">{{ description }}</div>',
@@ -34,6 +35,10 @@ export default class EGallery {
 				link: 'link',
 				firstRowItem: 'first-row-item',
 				animated: '-animated',
+			},
+			selectors: {
+				items: '.e-gallery-item',
+				image: '.e-gallery-image',
 			},
 			breakpoints: {
 				1024: {

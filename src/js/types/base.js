@@ -165,7 +165,7 @@ export default class BaseGalleryType {
 
 		this.imagesData = [];
 
-		jQuery.each( this.settings.items, ( index ) => {
+		this.settings.items.forEach( ( item, index ) => {
 			const image = new Image(),
 				promise = new Promise( ( resolve ) => {
 					image.onload = resolve;
@@ -175,14 +175,36 @@ export default class BaseGalleryType {
 
 			promise.then( () => this.calculateImageSize( image, index ) );
 
-			image.src = this.settings.items[ index ].thumbnail;
+			image.src = item.thumbnail;
 		} );
 
 		Promise.all( allPromises ).then( () => this.runGallery() );
 	}
 
+	makeGalleryFromContent() {
+		const { selectors } = this.settings,
+			items = [];
+
+		this.$items = this.$container.find( selectors.items );
+
+		this.$items.each( ( index, item ) => {
+			const $image = jQuery( item ).find( selectors.image ),
+				imageSource = $image.data( 'thumbnail' );
+
+			$image.css( 'background-image', `url("${ imageSource }")` );
+
+			items[ index ] = { thumbnail: imageSource };
+		} );
+
+		this.settings.items = items;
+	}
+
 	prepareGallery() {
-		this.buildGallery();
+		if ( this.settings.items ) {
+			this.buildGallery();
+		} else {
+			this.makeGalleryFromContent();
+		}
 
 		this.loadImages();
 	}
