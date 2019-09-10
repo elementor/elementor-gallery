@@ -22,16 +22,43 @@ $prefix: gallery !default;
 		--column: 0;
 		--row: 0;
 
+		position: relative;
 		flex-grow: 0;
 		flex-shrink: 0;
 		transition-property: top, left;
-		transition-duration: var(--animation-duration)
+		transition-duration: var(--animation-duration);
+
+		&:not(:hover) {
+
+			.#{ $prefix }-overlay {
+				display: none;
+			}
+		}
 	}
 
 	&-image {
 		background-position: center center;
 		background-size: cover;
 		width: 100%;
+	}
+
+	&-overlay {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		display: flex;
+		align-items: center;
+		justify-content: space-evenly;
+		flex-wrap: wrap;
+		flex-direction: column;
+		color: #fff;
+		background-color: rgba(0, 0, 0, .5);
+
+		&__title {
+			font-size: 24px;
+		}
 	}
 
 	&-grid {

@@ -1,12 +1,15 @@
 const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' ),
 	merge = require( 'webpack-merge' ),
-	mode = process.env.NODE_ENV || 'development';
-
-const fileSuffix = 'development' === mode ? '' : '.min';
+	mode = process.env.NODE_ENV || 'development',
+	fileSuffix = 'development' === mode ? '' : '.min';
 
 const commonConfig = {
 	mode,
-	devtool: 'source-map',
+	devtool: 'development' === mode ? 'source-map' : '',
+	output: {
+		path: __dirname + '/dist/js',
+		devtoolModuleFilenameTemplate: '../../[resource]',
+	},
 	plugins: [
 		new MiniCssExtractPlugin( {
 			filename: '../css/e-gallery' + fileSuffix + '.css',
@@ -49,7 +52,6 @@ const commonConfig = {
 const libraryConfig = {
 	entry: './src/js/e-gallery.js',
 	output: {
-		path: __dirname + '/dist/js',
 		filename: `e-gallery${ fileSuffix }.js`,
 		library: 'EGallery',
 		libraryExport: 'default',
@@ -59,7 +61,6 @@ const libraryConfig = {
 const jQueryConfig = {
 	entry: './src/js/jquery-e-gallery.js',
 	output: {
-		path: __dirname + '/dist/js',
 		filename: `jquery-e-gallery${ fileSuffix }.js`,
 	},
 };
