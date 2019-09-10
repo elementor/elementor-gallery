@@ -2,11 +2,11 @@ import GridGallery from './types/grid';
 import JustifiedGallery from './types/justified';
 import MasonryGallery from './types/masonry';
 
-import eGalleryScss from '../scss/eGallery.scss';
+import eGalleryScss from '../scss/e-gallery.scss';
 
 export default class EGallery {
 	constructor( userSettings ) {
-		this.settings = jQuery.extend( true, this.getDefaultSettings(), userSettings );
+		this.userSettings = userSettings;
 
 		this.initGalleriesTypes();
 
@@ -16,7 +16,10 @@ export default class EGallery {
 	getDefaultSettings() {
 		return {
 			container: null,
+			items: null,
 			type: 'grid',
+			overlay: false,
+			overlayTemplate: '<div class="{{ classesPrefix }}{{ classes.overlayTitle }}">{{ title }}</div><div class="{{ classesPrefix }}{{ classes.overlayDescription }}">{{ description }}</div>',
 			columns: 5,
 			horizontalGap: 10,
 			verticalGap: 10,
@@ -26,9 +29,16 @@ export default class EGallery {
 				container: 'container',
 				item: 'item',
 				image: 'image',
+				overlay: 'overlay',
+				overlayTitle: 'overlay__title',
+				overlayDescription: 'overlay__description',
 				link: 'link',
 				firstRowItem: 'first-row-item',
 				animated: '-animated',
+			},
+			selectors: {
+				items: '.e-gallery-item',
+				image: '.e-gallery-image',
 			},
 			breakpoints: {
 				1024: {
@@ -54,9 +64,15 @@ export default class EGallery {
 	}
 
 	createGallery() {
-		const GalleryHandlerType = this.galleriesTypes[ this.settings.type ];
+		const settings = jQuery.extend( true, this.getDefaultSettings(), this.userSettings );
 
-		this.galleryHandler = new GalleryHandlerType( this.settings );
+		const GalleryHandlerType = this.galleriesTypes[ settings.type ];
+
+		this.galleryHandler = new GalleryHandlerType( settings );
+	}
+
+	setSettings( key, value ) {
+		this.galleryHandler.setSettings( key, value );
 	}
 
 	destroy() {

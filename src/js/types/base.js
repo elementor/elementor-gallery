@@ -33,17 +33,60 @@ export default class BaseGalleryType {
 		this.elements.$window.on( 'resize', this.runGallery );
 	}
 
+	getNestedObjectData( object, key ) {
+		const keyStack = key.split( '.' ),
+			currentKey = keyStack.splice( 0, 1 );
+
+		if ( ! keyStack.length ) {
+			return { object, key };
+		}
+
+		return this.getNestedObjectData( object[ currentKey ], keyStack.join( '.' ) );
+	}
+
+	getTemplateArgs( args, key ) {
+		const nestedObjectData = this.getNestedObjectData( args, key );
+
+		return nestedObjectData.object[ nestedObjectData.key ] || '';
+	}
+
+	compileTemplate( template, args ) {
+		return template.replace( /{{([^}]+)}}/g, ( match, placeholder ) => this.getTemplateArgs( args, placeholder.trim() ) );
+	}
+
+	createOverlay( overlayData ) {
+		const { classes, overlayTemplate } = this.settings,
+			$overlay = jQuery( '<div>', { class: this.getItemClass( classes.overlay ) } ),
+			overlayContent = this.compileTemplate( overlayTemplate, jQuery.extend( true, this.settings, overlayData ) );
+
+		$overlay.html( overlayContent );
+
+		return $overlay;
+	}
+
 	createItem( itemData ) {
 		const { classes } = this.settings,
 			$item = jQuery( '<div>', { class: this.getItemClass( classes.item ) } ),
 			$image = jQuery( '<div>', { class: this.getItemClass( classes.image ) } ).css( 'background-image', 'url(' + itemData.thumbnail + ')' );
 
-		$item.append( $image );
+		let $overlay;
+
+		if ( this.settings.overlay ) {
+			$overlay = this.createOverlay( itemData );
+		}
+
+		let $contentWrapper = $item;
 
 		if ( itemData.url ) {
-			const $link = jQuery( '<a>', { class: this.getItemClass( classes.link ), href: itemData.url } );
+			$contentWrapper = jQuery( '<a>', { class: this.getItemClass( classes.link ), href: itemData.url } );
 
-			$image.wrap( $link );
+			$item.html( $contentWrapper );
+		}
+
+		$contentWrapper.html( $image );
+
+		if ( $overlay ) {
+			$contentWrapper.append( $overlay );
 		}
 
 		return $item;
@@ -122,7 +165,7 @@ export default class BaseGalleryType {
 
 		this.imagesData = [];
 
-		jQuery.each( this.settings.items, ( index ) => {
+		this.settings.items.forEach( ( item, index ) => {
 			const image = new Image(),
 				promise = new Promise( ( resolve ) => {
 					image.onload = resolve;
@@ -132,26 +175,58 @@ export default class BaseGalleryType {
 
 			promise.then( () => this.calculateImageSize( image, index ) );
 
-			image.src = this.settings.items[ index ].thumbnail;
+			image.src = item.thumbnail;
 		} );
 
 		Promise.all( allPromises ).then( () => this.runGallery() );
 	}
 
+	makeGalleryFromContent() {
+		const { selectors } = this.settings,
+			items = [];
+
+		this.$items = this.$container.find( selectors.items );
+
+		this.$items.each( ( index, item ) => {
+			const $image = jQuery( item ).find( selectors.image ),
+				imageSource = $image.data( 'thumbnail' );
+
+			$image.css( 'background-image', `url("${ imageSource }")` );
+
+			items[ index ] = { thumbnail: imageSource };
+		} );
+
+		this.settings.items = items;
+	}
+
 	prepareGallery() {
-		this.buildGallery();
+		if ( this.settings.items ) {
+			this.buildGallery();
+		} else {
+			this.makeGalleryFromContent();
+		}
 
 		this.loadImages();
 	}
 
-	runGallery() {
+	runGallery( refresh ) {
 		const containerStyle = this.$container[ 0 ].style;
 
 		containerStyle.setProperty( '--hgap', this.getCurrentDeviceSetting( 'horizontalGap' ) + 'px' );
 		containerStyle.setProperty( '--vgap', this.getCurrentDeviceSetting( 'verticalGap' ) + 'px' );
 		containerStyle.setProperty( '--animation-duration', this.settings.animationDuration + 'ms' );
 
-		this.run();
+		this.run( refresh );
+	}
+
+	setSettings( key, value ) {
+		const nestedObjectData = this.getNestedObjectData( this.settings, key );
+
+		if ( nestedObjectData.object ) {
+			nestedObjectData.object[ nestedObjectData.key ] = value;
+
+			this.runGallery( true );
+		}
 	}
 
 	unbindEvents() {

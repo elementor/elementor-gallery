@@ -1,10 +1,10 @@
 import BaseGalleryType from './base';
 
 export default class Masonry extends BaseGalleryType {
-	run() {
+	run( refresh ) {
 		const currentBreakpoint = this.getCurrentBreakpoint();
 
-		if ( currentBreakpoint === this.currentBreakpoint ) {
+		if ( ! refresh && currentBreakpoint === this.currentBreakpoint ) {
 			return;
 		}
 
@@ -37,8 +37,8 @@ export default class Masonry extends BaseGalleryType {
 
 		const highestColumn = Math.max( ...heights ),
 			highestColumnIndex = heights.indexOf( highestColumn ),
-			rows = Math.floor( this.settings.items.length / this.settings.columns ),
-			rowsRemainder = this.settings.items.length % this.settings.columns,
+			rows = Math.floor( this.settings.items.length / columns ),
+			rowsRemainder = this.settings.items.length % columns,
 			highestColumnsGapsCount = rowsRemainder > highestColumnIndex ? rows : rows - 1,
 			containerAspectRatio = highestColumn / containerWidth;
 
