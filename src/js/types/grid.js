@@ -10,7 +10,7 @@ export default class Grid extends BaseGalleryType {
 	setItemsPosition() {
 		const columns = this.getCurrentDeviceSetting( 'columns' );
 
-		this.$items.each( ( index, item ) => {
+		this.getActiveItems().each( ( index, item ) => {
 			item.style.setProperty( '--column', index % columns );
 			item.style.setProperty( '--row', Math.floor( index / columns ) );
 		} );
@@ -25,7 +25,7 @@ export default class Grid extends BaseGalleryType {
 
 		containerStyle.setProperty( '--rows', rows );
 
-		const itemWidth = this.$items.width(),
+		const itemWidth = this.getActiveItems().width(),
 			aspectRatio = this.settings.aspectRatio.split( ':' ),
 			aspectRatioPercents = aspectRatio[ 1 ] / aspectRatio[ 0 ],
 			itemHeight = aspectRatioPercents * itemWidth,

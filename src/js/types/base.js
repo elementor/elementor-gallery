@@ -50,6 +50,26 @@ export default class BaseGalleryType {
 		return nestedObjectData.object[ nestedObjectData.key ] || '';
 	}
 
+	getActiveItems() {
+		const activeTags = this.settings.tags;
+
+		if ( ! activeTags.length ) {
+			return this.$items;
+		}
+
+		return this.$items.filter( ( index, item ) => {
+			let itemTags = item.dataset.eGalleryTags;
+
+			if ( ! itemTags ) {
+				return false;
+			}
+
+			itemTags = itemTags.split( /[ ,]+/ );
+
+			return activeTags.some( ( tag ) => itemTags.includes( tag ) );
+		} );
+	}
+
 	compileTemplate( template, args ) {
 		return template.replace( /{{([^}]+)}}/g, ( match, placeholder ) => this.getTemplateArgs( args, placeholder.trim() ) );
 	}
@@ -66,7 +86,7 @@ export default class BaseGalleryType {
 
 	createItem( itemData ) {
 		const { classes } = this.settings,
-			$item = jQuery( '<div>', { class: this.getItemClass( classes.item ) } ),
+			$item = jQuery( '<div>', { class: this.getItemClass( classes.item ), 'data-e-gallery-tags': itemData.tags } ),
 			$image = jQuery( '<div>', { class: this.getItemClass( classes.image ) } ).css( 'background-image', 'url(' + itemData.thumbnail + ')' );
 
 		let $overlay;
@@ -215,6 +235,10 @@ export default class BaseGalleryType {
 		containerStyle.setProperty( '--hgap', this.getCurrentDeviceSetting( 'horizontalGap' ) + 'px' );
 		containerStyle.setProperty( '--vgap', this.getCurrentDeviceSetting( 'verticalGap' ) + 'px' );
 		containerStyle.setProperty( '--animation-duration', this.settings.animationDuration + 'ms' );
+
+		this.$items.hide();
+
+		this.getActiveItems().show();
 
 		this.run( refresh );
 	}
