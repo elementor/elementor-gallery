@@ -15,9 +15,10 @@ export default class Masonry extends BaseGalleryType {
 			columns = this.getCurrentDeviceSetting( 'columns' ),
 			containerWidth = this.$container.width(),
 			horizontalGap = this.getCurrentDeviceSetting( 'horizontalGap' ),
-			itemWidth = ( containerWidth - ( horizontalGap * ( columns - 1 ) ) ) / columns;
+			itemWidth = ( containerWidth - ( horizontalGap * ( columns - 1 ) ) ) / columns,
+			$items = this.getActiveItems();
 
-		this.$items.each( ( index, item ) => {
+		$items.each( ( index, item ) => {
 			const row = Math.floor( index / columns ),
 				indexAtRow = index % columns,
 				imageData = this.imagesData[ index ],
@@ -47,7 +48,7 @@ export default class Masonry extends BaseGalleryType {
 
 		this.$container.css( 'padding-bottom', ( containerAspectRatio * 100 ) + '%' );
 
-		this.$items.each( ( index, item ) => {
+		$items.each( ( index, item ) => {
 			const percentHeight = aggregatedHeights[ index ] ? aggregatedHeights[ index ] / highestColumn * 100 : 0,
 				row = Math.floor( index / columns );
 
