@@ -78,14 +78,15 @@ export default class Justified extends BaseGalleryType {
 	}
 
 	fitImagesInContainer( startIndex, endIndex, rowWidth ) {
-		const gapCount = endIndex - startIndex - 1;
+		const gapCount = endIndex - startIndex - 1,
+			$items = this.getActiveItems();
 
 		let aggregatedWidth = 0;
 
 		for ( let index = startIndex; index < endIndex; index++ ) {
 			const imageData = this.imagesData[ index ],
 				percentWidth = imageData.computedWidth / rowWidth,
-				item = this.$items.get( index ),
+				item = $items.get( index ),
 				firstRowItemClass = this.getItemClass( this.settings.classes.firstRowItem );
 
 			item.style.setProperty( '--item-width', percentWidth );
@@ -117,7 +118,7 @@ export default class Justified extends BaseGalleryType {
 		let currentRow = -1,
 			accumulatedTop = 0;
 
-		this.$items.each( ( index, item ) => {
+		this.getActiveItems().each( ( index, item ) => {
 			const itemRowIndex = item.style.getPropertyValue( '--item-row-index' ),
 				isFirstItem = '0' === itemRowIndex;
 
