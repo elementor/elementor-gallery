@@ -50,6 +50,34 @@ export default class BaseGalleryType {
 		return nestedObjectData.object[ nestedObjectData.key ] || '';
 	}
 
+	getCurrentBreakpoint() {
+		const breakpoints = Object.keys( this.settings.breakpoints ).map( Number ).sort( ( a, b ) => a - b );
+
+		let currentBreakpoint = 0;
+
+		breakpoints.some( ( breakpoint ) => {
+			if ( innerWidth < breakpoint ) {
+				currentBreakpoint = breakpoint;
+
+				return true;
+			}
+
+			return false;
+		} );
+
+		return currentBreakpoint;
+	}
+
+	getCurrentDeviceSetting( settingKey ) {
+		const currentBreakpoint = this.getCurrentBreakpoint();
+
+		if ( currentBreakpoint ) {
+			return this.settings.breakpoints[ currentBreakpoint ][ settingKey ];
+		}
+
+		return this.settings[ settingKey ];
+	}
+
 	getActiveItems() {
 		const activeTags = this.settings.tags;
 
@@ -128,34 +156,6 @@ export default class BaseGalleryType {
 
 			timeout = setTimeout( later, wait );
 		};
-	}
-
-	getCurrentBreakpoint() {
-		const breakpoints = Object.keys( this.settings.breakpoints ).map( Number ).sort( ( a, b ) => a - b );
-
-		let currentBreakpoint = 0;
-
-		breakpoints.some( ( breakpoint ) => {
-			if ( innerWidth < breakpoint ) {
-				currentBreakpoint = breakpoint;
-
-				return true;
-			}
-
-			return false;
-		} );
-
-		return currentBreakpoint;
-	}
-
-	getCurrentDeviceSetting( settingKey ) {
-		const currentBreakpoint = this.getCurrentBreakpoint();
-
-		if ( currentBreakpoint ) {
-			return this.settings.breakpoints[ currentBreakpoint ][ settingKey ];
-		}
-
-		return this.settings[ settingKey ];
 	}
 
 	buildGallery() {
