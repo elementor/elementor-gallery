@@ -33,10 +33,10 @@ An example in which an existing `<div>` element is used, and its selector is pas
 
 ```
 <body>
-	<div class=”gallery-container”></div>
+	<div class="gallery-container"></div>
 	<script>
 	const gallery = new eGallery( {
-		container: ‘.gallery-container’,
+		container: '.gallery-container',
 		items: [],
 	} );
 	</script>
