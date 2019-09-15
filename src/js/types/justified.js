@@ -55,7 +55,7 @@ export default class Justified extends BaseGalleryType {
 				}
 			}
 
-			const isLastItem = index === this.settings.items.length - 1;
+			const isLastItem = index === this.getActiveItems().length - 1;
 
 			this.imagesData[ index ].computedWidth = itemComputedWidth;
 
