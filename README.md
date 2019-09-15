@@ -29,30 +29,15 @@ The gallery is initialized by instantiating a new eGallery object, and passing i
 ### Without existing markup
 To use the gallery, you need a single empty container `<div>` element, which you pass in to the options object, as the `container` property. The container property can receive either a reference to the element, a jQuery instance of the element, or a jQuery selector for the element (if it has a `class` or `id` attribute, for example).
 
-An example in which the container is created in Javascript (jQuery), and its jQuery reference is passed into the container property:
-
-```
-<body>
-	<script>
-	const galleryContainer = jQuery( ‘<div>’ );
-
-	jQuery( ‘body’ ).append( container );
-
-	const gallery = new eGallery( {
-		container: galleryContainer
-	} );
-	</script>
-</body>
-```
-
 An example in which an existing `<div>` element is used, and its selector is passed into the container property:
 
 ```
 <body>
-<div class=”gallery-container”></div>
+	<div class=”gallery-container”></div>
 	<script>
 	const gallery = new eGallery( {
-		container: ‘.gallery-container’
+		container: ‘.gallery-container’,
+		items: [],
 	} );
 	</script>
 </body>
@@ -72,23 +57,23 @@ There are two ways to use existing markup:
 #### 1. Example markup using the library’s default class names:
 ```
 <body>
-	<div class=”gallery-container”>
-		<div class=”e-gallery-item”>
-			<div class=”e-gallery-image” style=”background-image: url(“/images/1.png”)”></div>
+	<div class="gallery-container">
+		<div class="e-gallery-item">
+			<div class="e-gallery-image" style="background-image: url("/images/1.png")"></div>
 		</div>
-		<div class=”e-gallery-item”>
-			<div class=”e-gallery-image” style=”background-image: url(“/images/2.png”)”></div>
+		<div class="e-gallery-item">
+			<div class="e-gallery-image" style="background-image: url("/images/2.png")"></div>
 		</div>
-		<div class=”e-gallery-item”>
-			<div class=”e-gallery-image” style=”background-image: url(“/images/3.png”)”></div>
+		<div class="e-gallery-item">
+			<div class="e-gallery-image" style="background-image: url("/images/3.png")"></div>
 		</div>
-		<div class=”e-gallery-item”>
-			<div class=”e-gallery-image” style=”background-image: url(“/images/4.png”)”></div>
+		<div class="e-gallery-item">
+			<div class="e-gallery-image" style="background-image: url("/images/4.png")"></div>
 		</div>
 	</div>
 	<script>
 	const gallery = new eGallery( {
-		container: ‘.gallery-container’
+		container: '.gallery-container'
 	} );
 	</script>
 </body>
@@ -99,10 +84,10 @@ It doesn’t matter whether the `item` and `image` elements have additional clas
 #### 2. Overwriting the library’s selectors:
 ```
 const gallery = new eGallery( {
-	container: ‘.gallery-container’,
+	container: '.gallery-container',
 	selectors: {
-		items: ‘your-item-selector-here’,
-		image: ‘your-image-selector-here’,
+		items: 'your-item-selector-here',
+		image: 'your-image-selector-here',
 	}
 } );
 ```
