@@ -1,4 +1,5 @@
-#E-Gallery
+# E-Gallery
+
 ## Introduction
 E-Gallery is a jQuery-powered, customizable, reactive image gallery library made by [Elementor](https://elementor.com/).
 
