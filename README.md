@@ -3,7 +3,7 @@
 ## Introduction
 E-Gallery is a jQuery-powered, customizable, reactive image gallery library made by [Elementor](https://elementor.com/).
 
-**Main Features**
+#### Main Features
 -   Fully responsive and reactive - reorganizes and resizes images on viewport changes (e.g., on window resize)
 -   Includes three different responsive layouts: grid, justified and masonry
 -   Filterable by image tags
