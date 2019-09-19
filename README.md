@@ -173,7 +173,7 @@ Default values of the `classes` property object:
 ## Methods
 
 |                   Method                 |                                                                     Description                                                                   |
-|:----------------------------------------:|:-------------------------------------------------------------------------------------------------------------------------------------------------:|
+|:----------------------------------------:|---------------------------------------------------------------------------------------------------------------------------------------------------|
 | setSettings(&nbsp;key,&nbsp;value&nbsp;) | Updates the setting passed as the `key` parameter with the value specified in the `value` parameter, and reruns the gallery with the new setting* |
 |              runGallery()                | Runs (or re-runs) the gallery setup (not including markup building).                                                                              |
 |          getCurrentBreakpoint()          | Returns the breakpoint currently used by the gallery                                                                                              |
