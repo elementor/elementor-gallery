@@ -36,7 +36,7 @@ To use the gallery, you need a single empty container `<div>` element, which you
 
 In the following example, a `<div>` container element is used. The element's jQuery selector is passed into the container property:
 
-```
+```html
 <body>
 	<div id="gallery-container"></div>
 	<script>
@@ -74,7 +74,7 @@ There are two ways to use HTML markup to pass items to the E-Gallery library:
 2.  Overwriting the gallery's jQuery selectors with your own selectors
 
 #### 1. Example markup using the library's default class names:
-```
+```html
 <body>
 	<div id="gallery-container">
 		<div class="e-gallery-item">
@@ -99,7 +99,7 @@ There are two ways to use HTML markup to pass items to the E-Gallery library:
 It doesn't matter if the `item` and `image` elements have additional classes and attributes, as long as they have the E-Gallery-defined selectors.
 
 #### 2. Overwriting the library's selectors:
-```
+```js
 new EGallery( {
 	container: '#gallery-container',
 	selectors: {
@@ -137,7 +137,7 @@ The `breakpoints` parameter accepts an object, in which each breakpoint (in pixe
 The breakpoints object can adjust the values of the `horizontalGap`, `verticalGap` and `columns` settings. 
 
 The following example shows the `breakpoints` object's default values:
-```
+```js
 new EGallery( {
 	container: '#gallery-container',
 	breakpoints: {
@@ -157,7 +157,7 @@ new EGallery( {
 
 ##### Classes (settings property)
 Default values of the `classes` property object:
-```
+```js
 {
   container: 'container',
   item: 'item',
@@ -173,7 +173,7 @@ Default values of the `classes` property object:
 ## Methods
 
 |                   Method                 |                                                                     Description                                                                   |
-|:----------------------------------------:|:-------------------------------------------------------------------------------------------------------------------------------------------------:|
+|:----------------------------------------:|---------------------------------------------------------------------------------------------------------------------------------------------------|
 | setSettings(&nbsp;key,&nbsp;value&nbsp;) | Updates the setting passed as the `key` parameter with the value specified in the `value` parameter, and reruns the gallery with the new setting* |
 |              runGallery()                | Runs (or re-runs) the gallery setup (not including markup building).                                                                              |
 |          getCurrentBreakpoint()          | Returns the breakpoint currently used by the gallery                                                                                              |
@@ -186,7 +186,7 @@ To use E-Gallery as a jQuery plugin, include the `jquery-e-gallery.js` file in y
 
 #### Usage
 Call the `.eGallery()` method on the gallery container's jQuery object, passing in the options object:
-```
+```html
 <body>
 	<div id="#gallery-container"></div>
 	<script>
