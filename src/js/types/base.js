@@ -78,14 +78,15 @@ export default class BaseGalleryType {
 		return this.settings[ settingKey ];
 	}
 
-	getActiveItems() {
-		const activeTags = this.settings.tags;
+	getActiveItems( returnIndexes = false ) {
+		const activeTags = this.settings.tags,
+			activeIndexes = [];
 
 		if ( ! activeTags.length ) {
 			return this.$items;
 		}
 
-		return this.$items.filter( ( index, item ) => {
+		const filteredItems = this.$items.filter( ( index, item ) => {
 			let itemTags = item.dataset.eGalleryTags;
 
 			if ( ! itemTags ) {
@@ -94,8 +95,30 @@ export default class BaseGalleryType {
 
 			itemTags = itemTags.split( /[ ,]+/ );
 
-			return activeTags.some( ( tag ) => itemTags.includes( tag ) );
+			if ( activeTags.some( ( tag ) => itemTags.includes( tag ) ) ) {
+				if ( returnIndexes ) {
+					activeIndexes.push( index );
+				}
+
+				return true;
+			}
+
+			return false;
 		} );
+
+		if ( returnIndexes ) {
+			return activeIndexes;
+		}
+
+		return filteredItems;
+	}
+
+	getActiveImagesData( index ) {
+		if ( this.settings.tags.length ) {
+			const itemIndex = this.getActiveItems( true )[ index ];
+			return this.imagesData[ itemIndex ];
+		}
+		return this.imagesData[ index ];
 	}
 
 	compileTemplate( template, args ) {

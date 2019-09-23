@@ -4,15 +4,13 @@ export default class Justified extends BaseGalleryType {
 	getDefaultSettings() {
 		return {
 			idealRowHeight: 200,
-			lastRow: 'normal',
+			lastRow: 'auto',
 			breakpoints: {
 				1024: {
 					idealRowHeight: 150,
-					lastRow: 'fit',
 				},
 				768: {
 					idealRowHeight: 100,
-					lastRow: 'fit',
 				},
 			},
 		};
@@ -57,13 +55,13 @@ export default class Justified extends BaseGalleryType {
 
 			const isLastItem = index === this.getActiveItems().length - 1;
 
-			this.imagesData[ index ].computedWidth = itemComputedWidth;
+			this.getActiveImagesData( index ).computedWidth = itemComputedWidth;
 
 			if ( isLastItem ) {
 				const lastRowMode = this.getCurrentDeviceSetting( 'lastRow' );
 
 				if ( 'hide' !== lastRowMode ) {
-					const totalRowWidth = 'fit' === lastRowMode ? newRowWidth : this.containerWidth;
+					const totalRowWidth = 'fit' === lastRowMode || 0.7 <= newRowWidth / this.containerWidth ? newRowWidth : this.containerWidth;
 
 					this.fitImagesInContainer( startIndex, index + 1, totalRowWidth );
 				}
@@ -84,7 +82,7 @@ export default class Justified extends BaseGalleryType {
 		let aggregatedWidth = 0;
 
 		for ( let index = startIndex; index < endIndex; index++ ) {
-			const imageData = this.imagesData[ index ],
+			const imageData = this.getActiveImagesData( index ),
 				percentWidth = imageData.computedWidth / rowWidth,
 				item = $items.get( index ),
 				firstRowItemClass = this.getItemClass( this.settings.classes.firstRowItem );
