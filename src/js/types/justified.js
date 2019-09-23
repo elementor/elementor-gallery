@@ -30,7 +30,7 @@ export default class Justified extends BaseGalleryType {
 		let oldRowWidth = 0;
 
 		for ( let index = startIndex; ; index++ ) {
-			let itemComputedWidth = Math.round( this.getCurrentDeviceSetting( 'idealRowHeight' ) * this.imagesData[ index ].ratio );
+			let itemComputedWidth = Math.round( this.getCurrentDeviceSetting( 'idealRowHeight' ) * this.getActiveImagesData( index ).ratio );
 
 			if ( itemComputedWidth > this.containerWidth ) {
 				itemComputedWidth = this.containerWidth;
