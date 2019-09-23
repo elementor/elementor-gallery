@@ -208,6 +208,10 @@ export default class BaseGalleryType {
 
 		this.imagesData = [];
 
+		if ( ! this.settings.items ) {
+			return;
+		}
+
 		this.settings.items.forEach( ( item, index ) => {
 			const image = new Image(),
 				promise = new Promise( ( resolve ) => {
@@ -233,6 +237,10 @@ export default class BaseGalleryType {
 			items = [];
 
 		this.$items = this.$container.find( selectors.items );
+
+		if ( ! this.$items.length ) {
+			return;
+		}
 
 		this.$items.each( ( index, item ) => {
 			const $image = jQuery( item ).find( selectors.image ),
