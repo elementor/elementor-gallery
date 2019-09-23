@@ -265,6 +265,10 @@ export default class BaseGalleryType {
 	}
 
 	runGallery( refresh ) {
+		if ( ! this.settings.items ) {
+			return;
+		}
+
 		const containerStyle = this.$container[ 0 ].style;
 
 		containerStyle.setProperty( '--hgap', this.getCurrentDeviceSetting( 'horizontalGap' ) + 'px' );
