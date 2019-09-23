@@ -1,0 +1,38 @@
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+	<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+	<script src="e-gallery.min.js"></script>
+	<link rel="stylesheet" href="e-gallery.min.css">
+	<link rel="stylesheet" href="index.css">
+</head>
+<body>
+	<div class="wrapper">
+		<h1>E-Gallery by Elementor - Demo page</h1>
+		<h2>Grid Gallery</h2>
+		<p id="aspect-ratio-choose" class="centered">
+			<span class="option-label">Change Aspect ratio:</span>
+			<a href="#" class="link link-active" data-aspect-ratio="16:9">16:9</a>
+			<a href="#" class="link" data-aspect-ratio="4:3">4:3</a>
+			<a href="#" class="link" data-aspect-ratio="21:9">21:9</a>
+			<a href="#" class="link" data-aspect-ratio="1:1">1:1</a>
+		</p>
+		<div id="grid-gallery-container" class="gallery-container"></div>
+		<h2>Justified Gallery</h2>
+		<div id="justified-gallery-container" class="gallery-container"></div>
+		<h2>Masonry Gallery</h2>
+		<p id="columns-choose" class="centered">
+			<span class="option-label">Change Number of Columns:</span>
+			<a href="#" class="link link-active" data-columns="5">5</a>
+			<a href="#" class="link" data-columns="4">4</a>
+			<a href="#" class="link" data-columns="3">3</a>
+			<a href="#" class="link" data-columns="2">2</a>
+		</p>
+		<div id="masonry-gallery-container" class="gallery-container"></div>
+	</div>
+	<script src="handler.js"></script>
+</body>
+</html>
