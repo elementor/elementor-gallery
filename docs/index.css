@@ -1,0 +1,50 @@
+body {
+	font-family: Arial, Calibri;
+}
+
+h1 {
+	text-align: center;
+}
+
+a {
+	text-decoration: none;
+}
+
+.wrapper {
+	max-width: 1024px;
+	margin: auto;
+}
+
+.gallery-container {
+	margin-bottom: 40px;
+}
+
+.centered {
+	text-align: center;
+	display: flex;
+	align-content: center;
+	align-items: center;
+	justify-content: center;
+}
+
+.option-label {
+	margin-right: 5px;
+}
+
+.link {
+	padding: 8px 10px;
+	color: #3f2c73;
+	font-size: 12px;
+	border: 2px solid #3f2c73;
+	min-width: 26px;
+}
+
+.link-active {
+	color: #fff;
+	background-color: #3f2c73;
+}
+
+.link:hover {
+	color: #fff;
+	background-color: #3f2c73;
+}
