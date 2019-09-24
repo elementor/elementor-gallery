@@ -18,11 +18,19 @@ export default class Masonry extends BaseGalleryType {
 			itemWidth = ( containerWidth - ( horizontalGap * ( columns - 1 ) ) ) / columns,
 			$items = this.getActiveItems();
 
+		if ( ! $items ) {
+			return;
+		}
+
 		$items.each( ( index, item ) => {
 			const row = Math.floor( index / columns ),
 				indexAtRow = index % columns,
-				imageData = this.getActiveImagesData( index ),
-				itemHeight = itemWidth / imageData.ratio;
+				imageData = this.getActiveImagesData( index );
+
+			if ( 'undefined' === typeof imageData ) {
+				return;
+			}
+			const itemHeight = itemWidth / imageData.ratio;
 
 			item.style.setProperty( '--item-height', ( imageData.height / imageData.width * 100 ) + '%' );
 			item.style.setProperty( '--column', indexAtRow );
