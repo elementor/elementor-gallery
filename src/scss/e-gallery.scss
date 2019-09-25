@@ -9,11 +9,12 @@ $prefix: gallery !default;
 		--rows: 0;
 		--gap-count: 0;
 		--container-aspect-ratio: 0;
-		--animation-duration: 0;
+		--animation-duration: 0.3s;
 
 		position: relative;
 		display: flex;
 		flex-wrap: wrap;
+		transition: padding-bottom var(--animation-duration);
 	}
 
 	&-item {
@@ -25,7 +26,7 @@ $prefix: gallery !default;
 		position: relative;
 		flex-grow: 0;
 		flex-shrink: 0;
-		transition-property: top, left;
+		transition-property: all;
 		transition-duration: var(--animation-duration);
 
 		&:not(:hover) {
@@ -33,6 +34,11 @@ $prefix: gallery !default;
 			.#{ $prefix }-overlay {
 				display: none;
 			}
+		}
+
+		&.gallery-item--hidden {
+			transform: scale3d(0, 0, 0);
+			opacity: 0;
 		}
 	}
 
