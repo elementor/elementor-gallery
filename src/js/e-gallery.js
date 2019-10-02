@@ -24,7 +24,7 @@ export default class EGallery {
 			columns: 5,
 			horizontalGap: 10,
 			verticalGap: 10,
-			animationDuration: 300,
+			animationDuration: 350,
 			classesPrefix: 'e-gallery-',
 			classes: {
 				container: 'container',
