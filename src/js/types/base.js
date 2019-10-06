@@ -216,11 +216,7 @@ export default class BaseGalleryType {
 
 			allPromises.push( promise );
 
-			promise.then( () => new Promise( ( resolve ) => {
-				this.calculateImageSize( image, index );
-				resolve();
-			} )
-			);
+			promise.then( () => this.calculateImageSize( image, index ) );
 
 			image.src = item.thumbnail;
 		} );
