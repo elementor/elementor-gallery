@@ -113,11 +113,11 @@ export default class BaseGalleryType {
 		return filteredItems;
 	}
 
-	getActiveImagesData( index ) {
+	getImageData( index ) {
 		if ( this.settings.tags.length ) {
-			const itemIndex = this.getActiveItems( true )[ index ];
-			return this.imagesData[ itemIndex ];
+			index = this.getActiveItems( true )[ index ];
 		}
+
 		return this.imagesData[ index ];
 	}
 
