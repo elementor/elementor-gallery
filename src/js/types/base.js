@@ -4,6 +4,8 @@ export default class BaseGalleryType {
 
 		this.$container = jQuery( this.settings.container );
 
+		this.timeouts = [];
+
 		this.runGallery = this.debounce( this.runGallery.bind( this ), 300 );
 
 		this.initElements();
@@ -113,11 +115,11 @@ export default class BaseGalleryType {
 		return filteredItems;
 	}
 
-	getActiveImagesData( index ) {
+	getImageData( index ) {
 		if ( this.settings.tags.length ) {
-			const itemIndex = this.getActiveItems( true )[ index ];
-			return this.imagesData[ itemIndex ];
+			index = this.getActiveItems( true )[ index ];
 		}
+
 		return this.imagesData[ index ];
 	}
 
@@ -166,18 +168,12 @@ export default class BaseGalleryType {
 	debounce( func, wait ) {
 		let timeout;
 
-		return function( ...args ) {
-			const context = this;
-
-			const later = () => {
-				timeout = null;
-
-				func.apply( context, args );
-			};
-
+		return ( ...args ) => {
 			clearTimeout( timeout );
 
-			timeout = setTimeout( later, wait );
+			timeout = setTimeout( () => func( ...args ), wait );
+
+			this.timeouts.push( timeout );
 		};
 	}
 
@@ -208,10 +204,6 @@ export default class BaseGalleryType {
 
 		this.imagesData = [];
 
-		if ( ! this.settings.items ) {
-			return;
-		}
-
 		this.settings.items.forEach( ( item, index ) => {
 			const image = new Image(),
 				promise = new Promise( ( resolve ) => {
@@ -220,11 +212,7 @@ export default class BaseGalleryType {
 
 			allPromises.push( promise );
 
-			promise.then( () => new Promise( ( resolve ) => {
-				this.calculateImageSize( image, index );
-				resolve();
-			} )
-			);
+			promise.then( () => this.calculateImageSize( image, index ) );
 
 			image.src = item.thumbnail;
 		} );
@@ -237,10 +225,6 @@ export default class BaseGalleryType {
 			items = [];
 
 		this.$items = this.$container.find( selectors.items );
-
-		if ( ! this.$items.length ) {
-			return;
-		}
 
 		this.$items.each( ( index, item ) => {
 			const $image = jQuery( item ).find( selectors.image ),
@@ -265,10 +249,6 @@ export default class BaseGalleryType {
 	}
 
 	runGallery( refresh ) {
-		if ( ! this.settings.items ) {
-			return;
-		}
-
 		const containerStyle = this.$container[ 0 ].style;
 
 		containerStyle.setProperty( '--hgap', this.getCurrentDeviceSetting( 'horizontalGap' ) + 'px' );
@@ -300,5 +280,7 @@ export default class BaseGalleryType {
 		this.unbindEvents();
 
 		this.$container.empty();
+
+		this.timeouts.forEach( ( timeout ) => clearTimeout( timeout ) );
 	}
 }

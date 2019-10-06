@@ -30,11 +30,7 @@ export default class Justified extends BaseGalleryType {
 		let oldRowWidth = 0;
 
 		for ( let index = startIndex; ; index++ ) {
-			const imageData = this.getActiveImagesData( index );
-
-			if ( 'undefined' === typeof imageData ) {
-				break;
-			}
+			const imageData = this.getImageData( index );
 
 			let itemComputedWidth = Math.round( this.getCurrentDeviceSetting( 'idealRowHeight' ) * imageData.ratio );
 
@@ -88,13 +84,8 @@ export default class Justified extends BaseGalleryType {
 		let aggregatedWidth = 0;
 
 		for ( let index = startIndex; index < endIndex; index++ ) {
-			const imageData = this.getActiveImagesData( index );
-
-			if ( 'undefined' === typeof imageData ) {
-				break;
-			}
-
-			const percentWidth = imageData.computedWidth / rowWidth,
+			const imageData = this.getImageData( index ),
+				percentWidth = imageData.computedWidth / rowWidth,
 				item = $items.get( index ),
 				firstRowItemClass = this.getItemClass( this.settings.classes.firstRowItem );
 
