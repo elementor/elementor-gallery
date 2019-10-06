@@ -4,6 +4,8 @@ export default class BaseGalleryType {
 
 		this.$container = jQuery( this.settings.container );
 
+		this.timeouts = [];
+
 		this.runGallery = this.debounce( this.runGallery.bind( this ), 300 );
 
 		this.initElements();
@@ -166,18 +168,12 @@ export default class BaseGalleryType {
 	debounce( func, wait ) {
 		let timeout;
 
-		return function( ...args ) {
-			const context = this;
-
-			const later = () => {
-				timeout = null;
-
-				func.apply( context, args );
-			};
-
+		return ( ...args ) => {
 			clearTimeout( timeout );
 
-			timeout = setTimeout( later, wait );
+			timeout = setTimeout( () => func( ...args ), wait );
+
+			this.timeouts.push( timeout );
 		};
 	}
 
@@ -284,5 +280,7 @@ export default class BaseGalleryType {
 		this.unbindEvents();
 
 		this.$container.empty();
+
+		this.timeouts.forEach( ( timeout ) => clearTimeout( timeout ) );
 	}
 }
