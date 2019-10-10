@@ -92,7 +92,7 @@ export default class Justified extends BaseGalleryType {
 			item.style.setProperty( '--item-width', percentWidth );
 			item.style.setProperty( '--gap-count', gapCount );
 			item.style.setProperty( '--item-height', ( ( imageData.height / imageData.width ) * 100 ) + '%' );
-			item.style.setProperty( '--item-left', aggregatedWidth );
+			item.style.setProperty( '--item-start', aggregatedWidth );
 			item.style.setProperty( '--item-row-index', index - startIndex );
 
 			aggregatedWidth += percentWidth;

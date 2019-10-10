@@ -1,31 +1,18 @@
-$prefix: gallery !default;
+$prefix: e-gallery !default;
 
 .#{ $prefix } {
 
 	&-container {
-		--hgap: 0;
-		--vgap: 0;
-		--columns: 0;
-		--rows: 0;
-		--gap-count: 0;
-		--container-aspect-ratio: 0;
-		--animation-duration: 0;
-
 		position: relative;
 		display: flex;
 		flex-wrap: wrap;
 	}
 
 	&-item {
-		--item-width: 0;
-		--item-height: 0;
-		--column: 0;
-		--row: 0;
-
 		position: relative;
 		flex-grow: 0;
 		flex-shrink: 0;
-		transition-property: top, left;
+		transition-property: top, left, right;
 		transition-duration: var(--animation-duration);
 
 		&:not(:hover) {
@@ -70,8 +57,6 @@ $prefix: gallery !default;
 		}
 
 		&.#{ $prefix }--animated {
-			--aspect-ratio: 0;
-
 			padding-bottom: var(--container-aspect-ratio);
 
 			.#{ $prefix }-item {
@@ -79,7 +64,6 @@ $prefix: gallery !default;
 
 				position: absolute;
 				top: calc(((100% / var(--rows)) + (var(--vgap) / var(--rows))) * var(--row));
-				left: calc(var(--item-width) * var(--column) + (var(--hgap) * var(--column)));
 				width: var(--item-width);
 			}
 		}
@@ -93,14 +77,9 @@ $prefix: gallery !default;
 		padding-bottom: calc(var(--container-aspect-ratio) * 100%);
 
 		.#{ $prefix }-item {
-			--item-left: 0;
-			--item-top: 0;
-			--item-row-index: 0;
-
 			position: absolute;
 			width: calc(var(--item-width) * (100% - var(--hgap) * var(--gap-count)));
 			height: var(--item-height);
-			left: calc(var(--item-left) * (100% - var(--hgap) * var(--gap-count)) + var(--hgap) * var(--item-row-index));
 			top: calc(var(--item-top) + (var(--row) * var(--vgap)));
 		}
 
@@ -110,21 +89,77 @@ $prefix: gallery !default;
 	}
 
 	&-masonry {
-		--highest-column-gap-count: 0;
 		height: 0;
 		margin-bottom: calc(var(--highest-column-gap-count) * var(--vgap));
 
 		.#{ $prefix }-item {
-			--percent-height: 0;
-
 			position: absolute;
 			width: calc(100% / var(--columns) - (var(--hgap) * (var(--columns) - 1) / var(--columns)));
-			left: calc((100% / var(--columns) - (var(--hgap) * (var(--columns) - 1) / var(--columns))) * var(--column) + (var(--hgap) * var(--column)));
 			top: calc(var(--percent-height) + (var(--row) * var(--vgap)));
 		}
 
 		.#{ $prefix }-image {
 			padding-bottom: var(--item-height);
+		}
+	}
+
+	&--ltr {
+
+		&.#{ $prefix } {
+
+			&-grid {
+
+				&.#{ $prefix }--animated {
+
+					.#{ $prefix }-item {
+						left: calc(var(--item-width) * var(--column) + (var(--hgap) * var(--column)));
+					}
+				}
+			}
+
+			&-justified {
+
+				.#{ $prefix }-item {
+					left: calc(var(--item-start) * (100% - var(--hgap) * var(--gap-count)) + var(--hgap) * var(--item-row-index));
+				}
+			}
+
+			&-masonry {
+
+				.#{ $prefix }-item {
+					left: calc((100% / var(--columns) - (var(--hgap) * (var(--columns) - 1) / var(--columns))) * var(--column) + (var(--hgap) * var(--column)));
+				}
+			}
+		}
+	}
+
+	&--rtl {
+
+		&.#{ $prefix } {
+
+			&-grid {
+
+				&.#{ $prefix }--animated {
+
+					.#{ $prefix }-item {
+						right: calc(var(--item-width) * var(--column) + (var(--hgap) * var(--column)));
+					}
+				}
+			}
+
+			&-justified {
+
+				.#{ $prefix }-item {
+					right: calc(var(--item-start) * (100% - var(--hgap) * var(--gap-count)) + var(--hgap) * var(--item-row-index));
+				}
+			}
+
+			&-masonry {
+
+				.#{ $prefix }-item {
+					right: calc((100% / var(--columns) - (var(--hgap) * (var(--columns) - 1) / var(--columns))) * var(--column) + (var(--hgap) * var(--column)));
+				}
+			}
 		}
 	}
 }
