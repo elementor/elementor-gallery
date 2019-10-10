@@ -37,6 +37,7 @@ export default class EGallery {
 				link: 'link',
 				firstRowItem: 'first-row-item',
 				animated: '-animated',
+				hidden: 'item--hidden',
 			},
 			selectors: {
 				items: '.e-gallery-item',

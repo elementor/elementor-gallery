@@ -26,7 +26,7 @@ $prefix: e-gallery !default;
 			}
 		}
 
-		&.gallery-item--hidden {
+		&.#{ $prefix }-item--hidden {
 			transform: scale3d(0, 0, 0);
 			opacity: 0;
 		}
@@ -64,7 +64,7 @@ $prefix: e-gallery !default;
 			grid-gap: var(--vgap) var(--hgap);
 			grid-template-columns: repeat(var(--columns), 1fr);
 
-			.gallery-item--hidden {
+			.#{ $prefix }-item--hidden {
 				position: absolute;
 			}
 		}
