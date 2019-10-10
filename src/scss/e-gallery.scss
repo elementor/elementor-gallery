@@ -12,7 +12,7 @@ $prefix: e-gallery !default;
 		position: relative;
 		flex-grow: 0;
 		flex-shrink: 0;
-		transition-property: top, left;
+		transition-property: top, left, right;
 		transition-duration: var(--animation-duration);
 
 		&:not(:hover) {
