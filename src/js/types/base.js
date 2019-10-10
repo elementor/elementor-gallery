@@ -32,7 +32,10 @@ export default class BaseGalleryType {
 			$window: jQuery( window ),
 		};
 
-		this.$container.addClass( this.getItemClass( this.settings.classes.container ) + ' ' + this.getItemClass( this.settings.type ) );
+		const directionClass = '-' + ( this.settings.rtl ? 'rtl' : 'ltr' ),
+			containerClasses = this.getItemClass( this.settings.classes.container ) + ' ' + this.getItemClass( this.settings.type ) + ' ' + this.getItemClass( directionClass );
+
+		this.$container.addClass( containerClasses );
 	}
 
 	bindEvents() {
