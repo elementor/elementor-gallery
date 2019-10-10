@@ -6,13 +6,17 @@ export default class BaseGalleryType {
 
 		this.timeouts = [];
 
-		this.runGallery = this.debounce( this.runGallery.bind( this ), 300 );
-
 		this.initElements();
 
 		this.prepareGallery();
 
+		const oldRunGallery = this.runGallery.bind( this );
+
+		this.runGallery = this.debounce( () => this.allImagesPromise.then( oldRunGallery ), 300 );
+
 		this.bindEvents();
+
+		this.runGallery();
 	}
 
 	getDefaultSettings() {
@@ -217,7 +221,7 @@ export default class BaseGalleryType {
 			image.src = item.thumbnail;
 		} );
 
-		Promise.all( allPromises ).then( () => this.runGallery() );
+		this.allImagesPromise = Promise.all( allPromises );
 	}
 
 	makeGalleryFromContent() {
