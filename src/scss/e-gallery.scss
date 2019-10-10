@@ -120,7 +120,7 @@ $prefix: e-gallery !default;
 			&-justified {
 
 				.#{ $prefix }-item {
-					left: calc(var(--item-left) * (100% - var(--hgap) * var(--gap-count)) + var(--hgap) * var(--item-row-index));
+					left: calc(var(--item-start) * (100% - var(--hgap) * var(--gap-count)) + var(--hgap) * var(--item-row-index));
 				}
 			}
 
@@ -150,7 +150,7 @@ $prefix: e-gallery !default;
 			&-justified {
 
 				.#{ $prefix }-item {
-					right: calc(var(--item-left) * (100% - var(--hgap) * var(--gap-count)) + var(--hgap) * var(--item-row-index));
+					right: calc(var(--item-start) * (100% - var(--hgap) * var(--gap-count)) + var(--hgap) * var(--item-row-index));
 				}
 			}
 
