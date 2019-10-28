@@ -1,3 +1,5 @@
+import elementInView from '../element-in-view';
+
 export default class BaseGalleryType {
 	constructor( settings ) {
 		this.settings = jQuery.extend( true, this.getDefaultSettings(), settings );
@@ -12,11 +14,21 @@ export default class BaseGalleryType {
 
 		const oldRunGallery = this.runGallery.bind( this );
 
-		this.runGallery = this.debounce( () => this.allImagesPromise.then( oldRunGallery ), 300 );
+		this.runGallery = this.debounce( () => {
+			if ( this.settings.lazyLoad ) {
+				oldRunGallery();
+			} else {
+				this.allImagesPromise.then( oldRunGallery );
+			}
+		}, 300 );
+
+		this.handleScroll = this.debounce( () => this.lazyLoadImages(), 300 );
 
 		this.bindEvents();
 
 		this.runGallery();
+
+		// this.handleScroll();
 	}
 
 	getDefaultSettings() {
@@ -40,6 +52,8 @@ export default class BaseGalleryType {
 
 	bindEvents() {
 		this.elements.$window.on( 'resize', this.runGallery );
+
+		this.elements.$window.on( 'scroll', this.handleScroll );
 	}
 
 	getNestedObjectData( object, key ) {
@@ -198,18 +212,8 @@ export default class BaseGalleryType {
 		} );
 	}
 
-	calculateImageSize( image, index ) {
-		this.imagesData[ index ] = {
-			width: image.width,
-			height: image.height,
-			ratio: image.width / image.height,
-		};
-	}
-
 	loadImages() {
 		const allPromises = [];
-
-		this.imagesData = [];
 
 		this.settings.items.forEach( ( item, index ) => {
 			const image = new Image(),
@@ -227,6 +231,28 @@ export default class BaseGalleryType {
 		this.allImagesPromise = Promise.all( allPromises );
 	}
 
+	lazyLoadImages() {
+		this.$items.each( ( index, item ) => {
+			if ( elementInView( item ) ) {
+				jQuery( item ).find( this.settings.selectors.image ).css( 'background-image', 'url(' + this.settings.items[ index ].thumbnail + ')' );
+			} else {
+				console.log( 'not in view' );
+			}
+		} );
+	}
+
+	calculateImageSize( image, index ) {
+		this.imagesData[ index ] = {
+			width: image.width,
+			height: image.height,
+			ratio: image.width / image.height,
+		};
+	}
+
+	createImagesData() {
+		this.settings.items.forEach( ( item, index ) => this.calculateImageSize( item, index ) );
+	}
+
 	makeGalleryFromContent() {
 		const { selectors } = this.settings,
 			items = [];
@@ -235,11 +261,19 @@ export default class BaseGalleryType {
 
 		this.$items.each( ( index, item ) => {
 			const $image = jQuery( item ).find( selectors.image ),
-				imageSource = $image.data( 'thumbnail' );
+				imageSource = $image.data( 'thumbnail' ),
+				imageWidth = $image.data( 'width' ),
+				imageHeight = $image.data( 'height' );
 
-			$image.css( 'background-image', `url("${ imageSource }")` );
+			items[ index ] = {
+				thumbnail: imageSource,
+				width: imageWidth,
+				height: imageHeight,
+			};
 
-			items[ index ] = { thumbnail: imageSource };
+			if ( ! this.settings.lazyLoad ) {
+				$image.css( 'background-image', `url("${ imageSource }")` );
+			}
 		} );
 
 		this.settings.items = items;
@@ -252,7 +286,13 @@ export default class BaseGalleryType {
 			this.makeGalleryFromContent();
 		}
 
-		this.loadImages();
+		this.imagesData = [];
+
+		if ( this.settings.lazyLoad ) {
+			this.createImagesData();
+		} else {
+			this.loadImages();
+		}
 	}
 
 	runGallery( refresh ) {
