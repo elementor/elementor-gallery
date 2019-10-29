@@ -36,6 +36,7 @@ $prefix: e-gallery !default;
 		background-position: center center;
 		background-size: cover;
 		width: 100%;
+		transform-origin: center top;
 	}
 
 	&-overlay {
@@ -173,6 +174,13 @@ $prefix: e-gallery !default;
 					right: calc((100% / var(--columns) - (var(--hgap) * (var(--columns) - 1) / var(--columns))) * var(--column) + (var(--hgap) * var(--column)));
 				}
 			}
+		}
+	}
+
+	&--lazyload {
+		.e-gallery-image:not(.e-gallery-image-loaded) {
+			filter: alpha(0);
+			transform: scale(0.5);
 		}
 	}
 }

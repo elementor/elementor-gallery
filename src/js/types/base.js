@@ -22,13 +22,11 @@ export default class BaseGalleryType {
 			}
 		}, 300 );
 
-		this.handleScroll = this.debounce( () => this.lazyLoadImages(), 300 );
+		this.handleScroll = this.debounce( () => this.lazyLoadImages(), 16 );
 
 		this.bindEvents();
 
 		this.runGallery();
-
-		// this.handleScroll();
 	}
 
 	getDefaultSettings() {
@@ -45,7 +43,8 @@ export default class BaseGalleryType {
 		};
 
 		const directionClass = '-' + ( this.settings.rtl ? 'rtl' : 'ltr' ),
-			containerClasses = this.getItemClass( this.settings.classes.container ) + ' ' + this.getItemClass( this.settings.type ) + ' ' + this.getItemClass( directionClass );
+			lazyLoadClass = this.settings.lazyLoad ? '-lazyload' : '',
+			containerClasses = this.getItemClass( this.settings.classes.container ) + ' ' + this.getItemClass( this.settings.type ) + ' ' + this.getItemClass( directionClass ) + ' ' + this.getItemClass( lazyLoadClass );
 
 		this.$container.addClass( containerClasses );
 	}
@@ -53,7 +52,9 @@ export default class BaseGalleryType {
 	bindEvents() {
 		this.elements.$window.on( 'resize', this.runGallery );
 
-		this.elements.$window.on( 'scroll', this.handleScroll );
+		if ( this.settings.lazyLoad ) {
+			this.elements.$window.on( 'scroll', this.handleScroll );
+		}
 	}
 
 	getNestedObjectData( object, key ) {
@@ -232,12 +233,34 @@ export default class BaseGalleryType {
 	}
 
 	lazyLoadImages() {
+		if ( ! this.settings.lazyLoad || this.settings.lazyLoadComplete ) {
+			return;
+		}
+
+		let loadedItems = 0;
+		this.settings.lazyLoadComplete = false;
+
 		this.$items.each( ( index, item ) => {
-			if ( elementInView( item ) ) {
-				jQuery( item ).find( this.settings.selectors.image ).css( 'background-image', 'url(' + this.settings.items[ index ].thumbnail + ')' );
-			} else {
-				console.log( 'not in view' );
+			if ( ! item.loaded && elementInView( item ) ) {
+				const image = new Image(),
+					promise = new Promise( ( resolve ) => {
+						image.onload = resolve;
+					} ),
+					$image = jQuery( item ).find( this.settings.selectors.image );
+
+				promise.then( () => {
+					$image.css( 'background-image', 'url(' + this.settings.items[ index ].thumbnail + ')' ).addClass( 'e-gallery-image-loaded' );
+					item.loaded = true;
+				} );
+				image.src = this.settings.items[ index ].thumbnail;
 			}
+			if ( item.loaded ) {
+				loadedItems++;
+				if ( loadedItems === this.settings.items.length ) {
+					this.settings.lazyLoadComplete = true;
+				}
+			}
+			return true;
 		} );
 	}
 
@@ -255,23 +278,21 @@ export default class BaseGalleryType {
 
 	makeGalleryFromContent() {
 		const { selectors } = this.settings,
+			isLazyLoad = this.settings.lazyLoad,
 			items = [];
 
 		this.$items = this.$container.find( selectors.items );
 
 		this.$items.each( ( index, item ) => {
-			const $image = jQuery( item ).find( selectors.image ),
-				imageSource = $image.data( 'thumbnail' ),
-				imageWidth = $image.data( 'width' ),
-				imageHeight = $image.data( 'height' );
+			const $image = jQuery( item ).find( selectors.image );
 
-			items[ index ] = {
-				thumbnail: imageSource,
-				width: imageWidth,
-				height: imageHeight,
-			};
+			items[ index ] = { thumbnail: $image.data( 'thumbnail' ) };
 
-			if ( ! this.settings.lazyLoad ) {
+			if ( isLazyLoad ) {
+				items[ index ].width = $image.data( 'width' );
+				items[ index ].height = $image.data( 'height' );
+				items[ index ].loaded = false;
+			} else {
 				$image.css( 'background-image', `url("${ imageSource }")` );
 			}
 		} );
@@ -305,6 +326,10 @@ export default class BaseGalleryType {
 		this.$items.addClass( this.getItemClass( this.settings.classes.hidden ) );
 
 		this.getActiveItems().removeClass( this.getItemClass( this.settings.classes.hidden ) );
+
+		if ( this.settings.lazyLoad ) {
+			setTimeout( () => this.lazyLoadImages(), 300 );
+		}
 
 		this.run( refresh );
 	}
