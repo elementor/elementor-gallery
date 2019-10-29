@@ -164,9 +164,13 @@ export default class BaseGalleryType {
 	createItem( itemData ) {
 		const { classes } = this.settings,
 			$item = jQuery( '<div>', { class: this.getItemClass( classes.item ), 'data-e-gallery-tags': itemData.tags } ),
-			$image = jQuery( '<div>', { class: this.getItemClass( classes.image ) } ).css( 'background-image', 'url(' + itemData.thumbnail + ')' );
+			$image = jQuery( '<div>', { class: this.getItemClass( classes.image ) } );
 
 		let $overlay;
+
+		if ( ! this.settings.lazyLoad ) {
+			$image.css( 'background-image', 'url(' + itemData.thumbnail + ')' );
+		}
 
 		if ( this.settings.overlay ) {
 			$overlay = this.createOverlay( itemData );
