@@ -22,7 +22,9 @@ export default class BaseGalleryType {
 			}
 		}, 300 );
 
-		this.handleScroll = this.debounce( () => this.lazyLoadImages(), 16 );
+		if ( this.settings.lazyLoad ) {
+			this.handleScroll = this.debounce( () => this.lazyLoadImages(), 16 );
+		}
 
 		this.bindEvents();
 
@@ -233,7 +235,7 @@ export default class BaseGalleryType {
 	}
 
 	lazyLoadImages() {
-		if ( ! this.settings.lazyLoad || this.settings.lazyLoadComplete ) {
+		if ( this.settings.lazyLoadComplete ) {
 			return;
 		}
 
