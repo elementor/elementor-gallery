@@ -262,9 +262,9 @@ export default class BaseGalleryType {
 		containerStyle.setProperty( '--vgap', this.getCurrentDeviceSetting( 'verticalGap' ) + 'px' );
 		containerStyle.setProperty( '--animation-duration', this.settings.animationDuration + 'ms' );
 
-		this.$items.hide();
+		this.$items.addClass( this.getItemClass( this.settings.classes.hidden ) );
 
-		this.getActiveItems().show();
+		this.getActiveItems().removeClass( this.getItemClass( this.settings.classes.hidden ) );
 
 		this.run( refresh );
 	}

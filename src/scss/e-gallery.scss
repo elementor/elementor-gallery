@@ -6,13 +6,17 @@ $prefix: e-gallery !default;
 		position: relative;
 		display: flex;
 		flex-wrap: wrap;
+
+		&:not(.#{ $prefix }-grid) {
+			transition: padding-bottom var(--animation-duration);
+		}
 	}
 
 	&-item {
 		position: relative;
 		flex-grow: 0;
 		flex-shrink: 0;
-		transition-property: top, left, right;
+		transition-property: all;
 		transition-duration: var(--animation-duration);
 
 		&:not(:hover) {
@@ -20,6 +24,11 @@ $prefix: e-gallery !default;
 			.#{ $prefix }-overlay {
 				display: none;
 			}
+		}
+
+		&.#{ $prefix }-item--hidden {
+			transform: scale3d(0, 0, 0);
+			opacity: 0;
 		}
 	}
 
@@ -54,6 +63,10 @@ $prefix: e-gallery !default;
 			display: grid;
 			grid-gap: var(--vgap) var(--hgap);
 			grid-template-columns: repeat(var(--columns), 1fr);
+
+			.#{ $prefix }-item--hidden {
+				position: absolute;
+			}
 		}
 
 		&.#{ $prefix }--animated {
