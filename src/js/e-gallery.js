@@ -39,6 +39,8 @@ export default class EGallery {
 				firstRowItem: 'first-row-item',
 				animated: '-animated',
 				hidden: 'item--hidden',
+				lazyLoad: '-lazyload',
+				imageLoaded: 'image-loaded',
 			},
 			selectors: {
 				items: '.e-gallery-item',
