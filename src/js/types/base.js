@@ -247,15 +247,15 @@ export default class BaseGalleryType {
 		this.settings.lazyLoadComplete = false;
 
 		this.$items.each( ( index, item ) => {
-			if ( ! item.loaded && elementInView( item ) ) {
+			const $item = jQuery( item );
+			if ( ! item.loaded && ! $item.hasClass( this.settings.classes.hidden ) && elementInView( item ) ) {
 				const image = new Image(),
 					promise = new Promise( ( resolve ) => {
 						image.onload = resolve;
-					} ),
-					$image = jQuery( item ).find( this.settings.selectors.image );
+					} );
 
 				promise.then( () => {
-					$image.css( 'background-image', 'url(' + this.settings.items[ index ].thumbnail + ')' ).addClass( 'e-gallery-image-loaded' );
+					$item.find( this.settings.selectors.image ).css( 'background-image', 'url(' + this.settings.items[ index ].thumbnail + ')' ).addClass( 'e-gallery-image-loaded' );
 					item.loaded = true;
 				} );
 				image.src = this.settings.items[ index ].thumbnail;
@@ -299,7 +299,7 @@ export default class BaseGalleryType {
 				items[ index ].height = $image.data( 'height' );
 				items[ index ].loaded = false;
 			} else {
-				$image.css( 'background-image', `url("${ imageSource }")` );
+				$image.css( 'background-image', `url("${ $image.data( 'thumbnail' ) }")` );
 			}
 		} );
 

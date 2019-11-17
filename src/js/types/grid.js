@@ -42,8 +42,8 @@ export default class Grid extends BaseGalleryType {
 		this.$container.addClass( animatedClass );
 
 		setTimeout( () => {
-			this.setContainerSize();
 			this.setItemsPosition();
+			this.setContainerSize();
 			setTimeout( () => this.$container.removeClass( animatedClass ), this.settings.animationDuration );
 		}, 50 );
 	}
