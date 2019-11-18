@@ -18,7 +18,7 @@ export default class Grid extends BaseGalleryType {
 
 	setContainerSize() {
 		const columns = this.getCurrentDeviceSetting( 'columns' ),
-			rows = Math.ceil( this.settings.items.length / columns ),
+			rows = Math.ceil( this.getActiveItems().length / columns ),
 			containerStyle = this.$container[ 0 ].style;
 
 		containerStyle.setProperty( '--columns', columns );
@@ -43,10 +43,8 @@ export default class Grid extends BaseGalleryType {
 
 		setTimeout( () => {
 			this.setItemsPosition();
-
 			this.setContainerSize();
-
 			setTimeout( () => this.$container.removeClass( animatedClass ), this.settings.animationDuration );
-		}, 100 );
+		}, 50 );
 	}
 }

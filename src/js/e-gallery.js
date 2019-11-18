@@ -24,8 +24,9 @@ export default class EGallery {
 			columns: 5,
 			horizontalGap: 10,
 			verticalGap: 10,
-			animationDuration: 300,
 			rtl: false,
+			animationDuration: 350,
+			lazyLoad: false,
 			classesPrefix: 'e-gallery-',
 			classes: {
 				container: 'container',
@@ -37,6 +38,9 @@ export default class EGallery {
 				link: 'link',
 				firstRowItem: 'first-row-item',
 				animated: '-animated',
+				hidden: 'item--hidden',
+				lazyLoad: '-lazyload',
+				imageLoaded: 'image-loaded',
 			},
 			selectors: {
 				items: '.e-gallery-item',
