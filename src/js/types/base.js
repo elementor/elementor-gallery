@@ -259,7 +259,7 @@ export default class BaseGalleryType {
 					} );
 
 				promise.then( () => {
-					$item.find( this.settings.selectors.image ).css( 'background-image', 'url(' + this.settings.items[ index ].thumbnail + ')' ).addClass( this.getItemClass( this.settings.classes.imageLoaded ) );
+					$item.find( this.settings.selectors.image ).css( 'background-image', 'url("' + this.settings.items[ index ].thumbnail + '")' ).addClass( this.getItemClass( this.settings.classes.imageLoaded ) );
 
 					item.loaded = true;
 				} );
