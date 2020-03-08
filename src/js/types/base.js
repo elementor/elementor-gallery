@@ -14,11 +14,11 @@ export default class BaseGalleryType {
 
 		const oldRunGallery = this.runGallery.bind( this );
 
-		this.runGallery = this.debounce( ( args ) => {
+		this.runGallery = this.debounce( ( ...args ) => {
 			if ( this.settings.lazyLoad ) {
-				oldRunGallery( args );
+				oldRunGallery( ...args );
 			} else {
-				this.allImagesPromise.then( oldRunGallery( args ) );
+				this.allImagesPromise.then( oldRunGallery( ...args ) );
 			}
 		}, 300 );
 
