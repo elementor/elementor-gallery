@@ -18,7 +18,7 @@ const commonConfig = {
 			filename: '../css/e-gallery' + fileSuffix + '.css',
 		} ),
 		new webpack.BannerPlugin( {
-			banner: 'E-Gallery by Elementor v' + pkg.version,
+			banner: `E-Gallery v${ pkg.version } by Elementor`,
 		} ),
 	],
 	module: {
