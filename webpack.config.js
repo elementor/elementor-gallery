@@ -1,3 +1,6 @@
+const webpack = require( 'webpack' ),
+	pkg = require( './package.json' );
+
 const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' ),
 	merge = require( 'webpack-merge' ),
 	mode = process.env.NODE_ENV || 'development',
@@ -13,6 +16,9 @@ const commonConfig = {
 	plugins: [
 		new MiniCssExtractPlugin( {
 			filename: '../css/e-gallery' + fileSuffix + '.css',
+		} ),
+		new webpack.BannerPlugin( {
+			banner: 'E-Gallery by Elementor v' + pkg.version,
 		} ),
 	],
 	module: {
