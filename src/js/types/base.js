@@ -18,7 +18,7 @@ export default class BaseGalleryType {
 			if ( this.settings.lazyLoad ) {
 				oldRunGallery( ...args );
 			} else {
-				this.allImagesPromise.then( ( ...args ) => oldRunGallery );
+				this.allImagesPromise.then( () => oldRunGallery( ...args ) );
 			}
 		}, 300 );
 
