@@ -70,7 +70,7 @@ export default class EGallery {
 	}
 
 	createGallery() {
-		const settings = jQuery.extend( true, this.getDefaultSettings(), this.userSettings );
+		const settings = jQuery.extend( this.getDefaultSettings(), this.userSettings );
 
 		const GalleryHandlerType = this.galleriesTypes[ settings.type ];
 
