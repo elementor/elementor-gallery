@@ -39,6 +39,8 @@ export default class EGallery {
 				firstRowItem: 'first-row-item',
 				animated: '-animated',
 				hidden: 'item--hidden',
+				lazyLoad: '-lazyload',
+				imageLoaded: 'image-loaded',
 			},
 			selectors: {
 				items: '.e-gallery-item',
@@ -68,7 +70,7 @@ export default class EGallery {
 	}
 
 	createGallery() {
-		const settings = jQuery.extend( true, this.getDefaultSettings(), this.userSettings );
+		const settings = jQuery.extend( this.getDefaultSettings(), this.userSettings );
 
 		const GalleryHandlerType = this.galleriesTypes[ settings.type ];
 
