@@ -113,6 +113,13 @@ export default class BaseGalleryType {
 			activeIndexes = [];
 
 		if ( ! activeTags.length ) {
+			if ( returnIndexes ) {
+				this.$items.each( ( index ) => {
+					activeIndexes.push( index );
+				} );
+				return activeIndexes;
+			}
+
 			return this.$items;
 		}
 
@@ -247,33 +254,34 @@ export default class BaseGalleryType {
 			return;
 		}
 
-		let loadedItems = 0;
+		const $items = this.getActiveItems(),
+			itemIndex = this.getActiveItems( true );
+		$items.each( ( index, item ) => {
+			const mainItem = this.settings.items[ itemIndex[ index ] ];
+			if ( mainItem.loaded || ! elementInView( item ) ) {
+				return true;
+			}
 
-		this.$items.each( ( index, item ) => {
-			const $item = jQuery( item );
-
-			if ( ! item.loaded && ! $item.hasClass( this.settings.classes.hidden ) && elementInView( item ) ) {
-				const image = new Image(),
-					promise = new Promise( ( resolve ) => {
-						image.onload = resolve;
-					} );
-
-				promise.then( () => {
-					$item.find( this.settings.selectors.image ).css( 'background-image', 'url("' + this.settings.items[ index ].thumbnail + '")' ).addClass( this.getItemClass( this.settings.classes.imageLoaded ) );
-
-					item.loaded = true;
+			const $item = jQuery( item ),
+				image = new Image(),
+				promise = new Promise( ( resolve ) => {
+					image.onload = resolve;
 				} );
 
-				image.src = this.settings.items[ index ].thumbnail;
-			}
-
-			if ( item.loaded ) {
-				loadedItems++;
-
-				if ( loadedItems === this.settings.items.length ) {
+			promise.then( () => {
+				$item.find( this.settings.selectors.image )
+					.css( 'background-image', 'url("' + mainItem.thumbnail + '")' )
+					.addClass( this.getItemClass( this.settings.classes.imageLoaded ) );
+				mainItem.loaded = true;
+				this.settings.loadedItemsCount++;
+				if ( this.settings.loadedItemsCount === this.settings.items.length ) {
 					this.settings.lazyLoadComplete = true;
 				}
-			}
+			} );
+
+			image.src = mainItem.thumbnail;
+
+			return true;
 		} );
 	}
 
@@ -322,6 +330,8 @@ export default class BaseGalleryType {
 		this.imagesData = [];
 
 		if ( this.settings.lazyLoad ) {
+			this.settings.loadedItemsCount = 0;
+			this.settings.lazyLoadComplete = false;
 			this.createImagesData();
 		} else {
 			this.loadImages();
