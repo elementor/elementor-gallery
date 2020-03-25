@@ -32,7 +32,7 @@ export default class Masonry extends BaseGalleryType {
 
 			columnHeight = heights[ indexAtRow ];
 			jQuery.each( heights, ( colNumber, colHeight ) => {
-				if ( ( colHeight > 5 ) && columnHeight > colHeight + 5 ) {
+				if ( colHeight > 5 && columnHeight > colHeight + 5 ) {
 					columnHeight = colHeight;
 					indexAtRow = colNumber;
 				}
