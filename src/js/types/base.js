@@ -250,17 +250,21 @@ export default class BaseGalleryType {
 	}
 
 	lazyLoadImages() {
-		if ( this.settings.lazyLoadComplete ) {
+		if ( this.lazyLoadComplete ) {
 			return;
 		}
 
 		const $items = this.getActiveItems(),
-			itemIndex = this.getActiveItems( true );
+			itemsIndexes = this.getActiveItems( true );
+
 		$items.each( ( index, item ) => {
-			const mainItem = this.settings.items[ itemIndex[ index ] ];
-			if ( mainItem.loaded || ! elementInView( item ) ) {
+			const itemData = this.settings.items[ itemsIndexes[ index ] ];
+
+			if ( itemData.loading || ! elementInView( item ) ) {
 				return true;
 			}
+
+			itemData.loading = true;
 
 			const $item = jQuery( item ),
 				image = new Image(),
@@ -270,16 +274,17 @@ export default class BaseGalleryType {
 
 			promise.then( () => {
 				$item.find( this.settings.selectors.image )
-					.css( 'background-image', 'url("' + mainItem.thumbnail + '")' )
+					.css( 'background-image', 'url("' + itemData.thumbnail + '")' )
 					.addClass( this.getItemClass( this.settings.classes.imageLoaded ) );
-				mainItem.loaded = true;
-				this.settings.loadedItemsCount++;
-				if ( this.settings.loadedItemsCount === this.settings.items.length ) {
-					this.settings.lazyLoadComplete = true;
+
+				this.loadedItemsCount++;
+
+				if ( this.loadedItemsCount === this.settings.items.length ) {
+					this.lazyLoadComplete = true;
 				}
 			} );
 
-			image.src = mainItem.thumbnail;
+			image.src = itemData.thumbnail;
 
 			return true;
 		} );
@@ -330,8 +335,8 @@ export default class BaseGalleryType {
 		this.imagesData = [];
 
 		if ( this.settings.lazyLoad ) {
-			this.settings.loadedItemsCount = 0;
-			this.settings.lazyLoadComplete = false;
+			this.loadedItemsCount = 0;
+			this.lazyLoadComplete = false;
 			this.createImagesData();
 		} else {
 			this.loadImages();
