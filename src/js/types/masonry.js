@@ -32,7 +32,7 @@ export default class Masonry extends BaseGalleryType {
 
 			columnHeight = heights[ indexAtRow ];
 			jQuery.each( heights, ( colNumber, colHeight ) => {
-				if ( colHeight > 5 && columnHeight > colHeight + 5 ) {
+				if ( colHeight && columnHeight > colHeight + 5 ) {
 					columnHeight = colHeight;
 					indexAtRow = colNumber;
 				}
@@ -54,7 +54,7 @@ export default class Masonry extends BaseGalleryType {
 			containerAspectRatio = highestColumn / containerWidth;
 
 		this.$container[ 0 ].style.setProperty( '--columns', columns );
-		this.$container[ 0 ].style.setProperty( '--highest-column-gap-count', highestColumnsGapsCount.toString() );
+		this.$container[ 0 ].style.setProperty( '--highest-column-gap-count', highestColumnsGapsCount );
 
 		this.$container.css( 'padding-bottom', ( containerAspectRatio * 100 ) + '%' );
 
