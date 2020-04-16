@@ -18,6 +18,7 @@ export default class Masonry extends BaseGalleryType {
 			horizontalGap = this.getCurrentDeviceSetting( 'horizontalGap' ),
 			itemWidth = ( containerWidth - ( horizontalGap * ( columns - 1 ) ) ) / columns,
 			$items = this.getActiveItems();
+
 		let naturalColumnHeight = 0;
 
 		for ( let i = 0; i < columns; i++ ) {
@@ -28,6 +29,7 @@ export default class Masonry extends BaseGalleryType {
 		$items.each( ( index, item ) => {
 			const imageData = this.getImageData( index ),
 				itemHeight = itemWidth / imageData.ratio;
+
 			let indexAtRow = index % columns;
 
 			naturalColumnHeight = heights[ indexAtRow ];
@@ -60,6 +62,7 @@ export default class Masonry extends BaseGalleryType {
 
 		$items.each( ( index, item ) => {
 			const percentHeight = aggregatedHeights[ index ] ? aggregatedHeights[ index ] / highestColumn * 100 : 0;
+
 			item.style.setProperty( '--percent-height', percentHeight + '%' );
 		} );
 	}
