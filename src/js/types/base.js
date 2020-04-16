@@ -113,6 +113,14 @@ export default class BaseGalleryType {
 			activeIndexes = [];
 
 		if ( ! activeTags.length ) {
+			if ( returnIndexes ) {
+				this.$items.each( ( index ) => {
+					activeIndexes.push( index );
+				} );
+
+				return activeIndexes;
+			}
+
 			return this.$items;
 		}
 
@@ -243,37 +251,43 @@ export default class BaseGalleryType {
 	}
 
 	lazyLoadImages() {
-		if ( this.settings.lazyLoadComplete ) {
+		if ( this.lazyLoadComplete ) {
 			return;
 		}
 
-		let loadedItems = 0;
+		const $items = this.getActiveItems(),
+			itemsIndexes = this.getActiveItems( true );
 
-		this.$items.each( ( index, item ) => {
-			const $item = jQuery( item );
+		$items.each( ( index, item ) => {
+			const itemData = this.settings.items[ itemsIndexes[ index ] ];
 
-			if ( ! item.loaded && ! $item.hasClass( this.settings.classes.hidden ) && elementInView( item ) ) {
-				const image = new Image(),
-					promise = new Promise( ( resolve ) => {
-						image.onload = resolve;
-					} );
+			if ( itemData.loading || ! elementInView( item ) ) {
+				return true;
+			}
 
-				promise.then( () => {
-					$item.find( this.settings.selectors.image ).css( 'background-image', 'url("' + this.settings.items[ index ].thumbnail + '")' ).addClass( this.getItemClass( this.settings.classes.imageLoaded ) );
+			itemData.loading = true;
 
-					item.loaded = true;
+			const $item = jQuery( item ),
+				image = new Image(),
+				promise = new Promise( ( resolve ) => {
+					image.onload = resolve;
 				} );
 
-				image.src = this.settings.items[ index ].thumbnail;
-			}
+			promise.then( () => {
+				$item.find( this.settings.selectors.image )
+					.css( 'background-image', 'url("' + itemData.thumbnail + '")' )
+					.addClass( this.getItemClass( this.settings.classes.imageLoaded ) );
 
-			if ( item.loaded ) {
-				loadedItems++;
+				this.loadedItemsCount++;
 
-				if ( loadedItems === this.settings.items.length ) {
-					this.settings.lazyLoadComplete = true;
+				if ( this.loadedItemsCount === this.settings.items.length ) {
+					this.lazyLoadComplete = true;
 				}
-			}
+			} );
+
+			image.src = itemData.thumbnail;
+
+			return true;
 		} );
 	}
 
@@ -322,6 +336,8 @@ export default class BaseGalleryType {
 		this.imagesData = [];
 
 		if ( this.settings.lazyLoad ) {
+			this.loadedItemsCount = 0;
+			this.lazyLoadComplete = false;
 			this.createImagesData();
 		} else {
 			this.loadImages();
