@@ -117,6 +117,7 @@ export default class BaseGalleryType {
 				this.$items.each( ( index ) => {
 					activeIndexes.push( index );
 				} );
+
 				return activeIndexes;
 			}
 
