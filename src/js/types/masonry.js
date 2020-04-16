@@ -18,7 +18,7 @@ export default class Masonry extends BaseGalleryType {
 			horizontalGap = this.getCurrentDeviceSetting( 'horizontalGap' ),
 			itemWidth = ( containerWidth - ( horizontalGap * ( columns - 1 ) ) ) / columns,
 			$items = this.getActiveItems();
-		let columnHeight = 0;
+		let naturalColumnHeight = 0;
 
 		for ( let i = 0; i < columns; i++ ) {
 			itemsInColumn[ i ] = 0;
@@ -30,10 +30,10 @@ export default class Masonry extends BaseGalleryType {
 				itemHeight = itemWidth / imageData.ratio;
 			let indexAtRow = index % columns;
 
-			columnHeight = heights[ indexAtRow ];
-			jQuery.each( heights, ( colNumber, colHeight ) => {
-				if ( colHeight && columnHeight > colHeight + 5 ) {
-					columnHeight = colHeight;
+			naturalColumnHeight = heights[ indexAtRow ];
+			jQuery.each( heights, ( colNumber, currentColHeight ) => {
+				if ( currentColHeight && naturalColumnHeight > currentColHeight + 5 ) {
+					naturalColumnHeight = currentColHeight;
 					indexAtRow = colNumber;
 				}
 			} );
